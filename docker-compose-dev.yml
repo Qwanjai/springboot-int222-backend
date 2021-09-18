@@ -1,0 +1,9 @@
+networks:
+  default:
+    external:
+      name: int222-network
+services:
+  backend-dev:
+    container_name: backend-dev
+    build: .
+    image: int222-backend:dev
