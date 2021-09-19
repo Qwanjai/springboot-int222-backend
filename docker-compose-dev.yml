@@ -7,3 +7,5 @@ services:
     container_name: backend-dev
     build: .
     image: int222-backend:dev
+    EXPOSE:
+      - "8081:5000"

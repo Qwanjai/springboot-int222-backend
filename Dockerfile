@@ -1,18 +1,10 @@
-FROM openjdk:8-jdk-alpine as build
+FROM maven:3.6.0-jdk-11-slim as build
 WORKDIR /backend
-
-COPY mvnw .
-COPY .mvn .mvn
 COPY pom.xml .
-COPY src src
+COPY src ./src
+RUN mvn clean install
 
-RUN ./mvnw install
-RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
-
-FROM openjdk:8-jdk-alpine as production
-VOLUME /tmp
-ARG DEPENDENCY=/backend/target/dependency
-COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
-COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
-COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
-ENTRYPOINT ["java","-cp","backend:backend/lib/*","int222.backend.BackendApplication"]
+FROM adoptopenjdk/openjdk11:jdk-11.0.10_9-alpine as dev
+ARG JAR_FILE=/backend/target/backend-0.0.1-SNAPSHOT.jar
+COPY --from=build ${JAR_FILE} backend-0.0.1-SNAPSHOT.jar
+ENTRYPOINT ["java","-jar","backend-0.0.1-SNAPSHOT"]
