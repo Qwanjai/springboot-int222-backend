@@ -7,5 +7,4 @@ services:
     container_name: backend-dev
     build: .
     image: int222-backend:dev
-    ports:
-      - "8081:5000"
+
