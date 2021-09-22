@@ -23,15 +23,6 @@ jobs:
           echo spring.datasource.username=${{ secrets.DEV_DB_USERNAME }} >> ./src/main/resources/application.properties
           echo spring.datasource.password=${{ secrets.DEV_DB_PASSWORD }} >> ./src/main/resources/application.properties
 
-      - name: Send .env file to host
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.SSH_HOSTNAME }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: ./src/main/resources/application.properties
-          target: ~/backend/dev/
-
       # Don't do anything
       - name: Login to Github Docker Registry
         uses: docker/login-action@v1
@@ -50,13 +41,10 @@ jobs:
       - name: Publish compose file
         uses: appleboy/scp-action@master
         with:
-          # Set up secrets for SSH connection
-          host: ${{ secrets.SSH_HOSTNAME }} # IP Example: 111.222.111.222
-          username: ${{ secrets.SSH_USERNAME }} # Username Example: qwanjai
-          key: ${{ secrets.SSH_PRIVATE_KEY }} # Private key
-          # docker-compose file you want to send
+          host: ${{ secrets.SSH_HOSTNAME }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: ./docker-compose.dev.yml
-          # Destination file where you want to send to
           target: ~/backend/dev/
 
   deploy:
@@ -66,11 +54,9 @@ jobs:
       - name: Run application
         uses: appleboy/ssh-action@master
         with:
-          # Set up secrets for SSH connection
-          host: ${{ secrets.SSH_HOSTNAME }} # IP Example: 111.222.111.222
-          username: ${{ secrets.SSH_USERNAME }} # Username Example: qwanjai
-          key: ${{ secrets.SSH_PRIVATE_KEY }} # Private key
-          # Run a specified docker-compose file you want to run
+          host: ${{ secrets.SSH_HOSTNAME }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             docker-compose -f ~/backend/dev/docker-compose.dev.yml pull
             docker-compose -f ~/backend/dev/docker-compose.dev.yml up -d
