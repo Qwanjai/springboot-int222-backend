@@ -43,9 +43,9 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-        context: .
-        push: true
-        tags: ghcr.io/int222/backend:dev
+          context: .
+          push: true
+          tags: ghcr.io/int222/backend:dev
 
       - name: Publish compose file
         uses: appleboy/scp-action@master
