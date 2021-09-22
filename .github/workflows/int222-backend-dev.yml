@@ -19,7 +19,7 @@ jobs:
       #   PRD: jdbc:mysql://prd_mysqldb:3306/sandalsshop (prd_mysqldb = [db_container_name]) (container_name depends on your naming or folder)
       - name: Create .env file
         run: |
-          echo DB_URL=${{ secrets.DEV_DB_URL] }} >> ./src/main/resources/application.properties
+          echo DB_URL=${{ secrets.DEV_DB_URL }} >> ./src/main/resources/application.properties
           echo DB_USERNAME=${{ secrets.DEV_DB_USERNAME }} >> ./src/main/resources/application.properties
           echo DB_PASSWORD=${{ secrets.DEV_DB_PASSWORD }} >> ./src/main/resources/application.properties
 
