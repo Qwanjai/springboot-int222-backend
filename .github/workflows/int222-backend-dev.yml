@@ -19,18 +19,16 @@ jobs:
       #   PRD: jdbc:mysql://prd_mysqldb:3306/sandalsshop (prd_mysqldb = [db_container_name]) (container_name depends on your naming or folder)
       - name: Create .env file
         run: |
-          echo DB_URL=${{ secrets.DEV_DB_URL }} >> ./src/main/resources/application.properties
-          echo DB_USERNAME=${{ secrets.DEV_DB_USERNAME }} >> ./src/main/resources/application.properties
-          echo DB_PASSWORD=${{ secrets.DEV_DB_PASSWORD }} >> ./src/main/resources/application.properties
+          echo spring.datasource.url=${{ secrets.DEV_DB_URL }} >> ./src/main/resources/application.properties
+          echo spring.datasource.username=${{ secrets.DEV_DB_USERNAME }} >> ./src/main/resources/application.properties
+          echo spring.datasource.password=${{ secrets.DEV_DB_PASSWORD }} >> ./src/main/resources/application.properties
 
       - name: Send .env file to host
         uses: appleboy/scp-action@master
         with:
-          # Set up secrets for SSH connection
-          host: ${{ secrets.SSH_HOSTNAME }} # IP Example: 111.222.111.222
-          username: ${{ secrets.SSH_USERNAME }} # Username Example: qwanjai
-          key: ${{ secrets.SSH_PRIVATE_KEY }} # Private key
-          # Change for your own .env file (path/to/application.properties)
+          host: ${{ secrets.SSH_HOSTNAME }} 
+          username: ${{ secrets.SSH_USERNAME }} 
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: ./src/main/resources/application.properties
           target: ~/backend/dev/
 
@@ -45,9 +43,12 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-          push: true
-          # ghcr.io/[github_username]/[github_repo]:dev (Every character must be lower case)
-          tags: ghcr.io/int222/backend:dev
+          - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+        context: .
+        push: true
+        tags: ghcr.io/int222/backend:dev
 
       - name: Publish compose file
         uses: appleboy/scp-action@master
