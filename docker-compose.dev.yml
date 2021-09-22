@@ -6,5 +6,6 @@ services:
   backend-dev:
     container_name: backend-dev
     build: .
-    image: int222-backend:dev
-
+    image: ghcr.io/int222/backend:dev
+    volumes:
+      - ./images:/app/images
