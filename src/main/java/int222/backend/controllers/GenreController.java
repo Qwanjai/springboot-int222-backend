@@ -1,29 +1,34 @@
 package int222.backend.controllers;
 
 
-import int222.backend.models.Genre;
+import int222.backend.models.entities.Genre;
 import int222.backend.repositories.GenreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/api")
 public class GenreController {
     @Autowired
     private GenreRepository genreRepository;
 
-    @GetMapping("/genre")
+    @GetMapping("/view/genre")
     public List<Genre> getGenreList(){
         return  this.genreRepository.findAll();
     }
 
-    @GetMapping("/view")
+    @GetMapping("/test")
     public String  getViewTest(){
         return  "this is a test";
+    }
+    @DeleteMapping("/genre/{id}")
+    public String deleteGenre(@PathVariable("id") int id){
+        genreRepository.deleteById(id);
+        if(genreRepository.findById(id).isEmpty()==false){
+            return "Delete Genre Unsucessful";
+        }
+        return "Delete Genre Sucessful";
     }
 }
