@@ -60,7 +60,7 @@ public class UserController {
 
     @DeleteMapping("/user/{id}")
     public String deleteUser(@PathVariable("id") long id)  {
-       if(userRepository.findById(id).isEmpty()==false){
+       if(userRepository.findById(id).isEmpty()==true){
            return "Delete unsucessful";
        }
        userRepository.deleteById(id);
