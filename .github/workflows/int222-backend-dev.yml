@@ -11,12 +11,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Change variable and file_name for your own env (from .env to path/to/application.properties)
-      # Set up secrets for DB connection
-      # Change DB_URL for the correct environment
-      # Example:
-      #   DEV: jdbc:mysql://dev_mysqldb:3306/sandalsshop (dev_mysqldb = [db_container_name]) (container_name depends on your naming or folder)
-      #   PRD: jdbc:mysql://prd_mysqldb:3306/sandalsshop (prd_mysqldb = [db_container_name]) (container_name depends on your naming or folder)
       - name: Create .env file
         run: |
           echo spring.datasource.url=${{ secrets.DEV_DB_URL }} >> ./src/main/resources/application.properties
@@ -24,7 +18,7 @@ jobs:
           echo spring.datasource.password=${{ secrets.DEV_DB_PASSWORD }} >> ./src/main/resources/application.properties
           cat ./src/main/resources/application.properties
 
-      # Don't do anything
+
       - name: Login to Github Docker Registry
         uses: docker/login-action@v1
         with:
