@@ -12,15 +12,14 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="genre")
+@Table(name="moviestatus")
 @NoArgsConstructor
 @ToString
 @AllArgsConstructor
-public class Genre {
+public class MovieStatus {
     @Id
-    @Column(name="genre_id")
-    private @Getter  int genre_id;
-    @Column(name="genre")
-    private @Getter String genre;
-
+    @Column(name="status_id")
+    private @Getter int status_id;
+    @Column
+    private  @Getter String statusname;
 }

@@ -1,6 +1,5 @@
 package int222.backend.models.entities;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,15 +11,14 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="genre")
+@Table(name="studio")
 @NoArgsConstructor
 @ToString
 @AllArgsConstructor
-public class Genre {
+public class Studio {
     @Id
-    @Column(name="genre_id")
-    private @Getter  int genre_id;
-    @Column(name="genre")
-    private @Getter String genre;
-
+    @Column(name="studio_id")
+    private @Getter int studio_id;
+    @Column(name="studioname")
+    private @Getter String studioname;
 }
