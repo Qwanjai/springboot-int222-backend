@@ -4,7 +4,7 @@ networks:
       name: int222-network
 services:
   backend-dev:
-    container_name: backend-dev
+    container_name: backend_dev
     build: .
     image: ghcr.io/int222/backend:dev
     volumes:
