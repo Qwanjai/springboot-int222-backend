@@ -21,7 +21,8 @@ jobs:
           echo jwt.token.validity=${{ secrets.JWT_TOKEN_VALIDITY }} >> ./src/main/resources/application.properties
           echo jwt.signing.key=${{ secrets.JWT_SIGNING_KEY }} >> ./src/main/resources/application.properties
           echo jwt.authorities.key=${{ secrets.JWT_AUTHORITIES_KEY }} >> ./src/main/resources/application.properties
-          echo Jwt.token.prefix=${{ secrets.JWT_TOKEN_PREFIX }} >> ./src/main/resources/application.properties
+          echo jwt.token.prefix=${{ secrets.JWT_TOKEN_PREFIX }} >> ./src/main/resources/application.properties
+          cat ./src/main/resources/application.properties
 
 
       - name: Login to Github Docker Registry
