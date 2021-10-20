@@ -14,7 +14,7 @@ import java.util.List;
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/api")
-public class GenreController {
+public class UtilityController {
     @Autowired
     private GenreRepository genreRepository;
 
