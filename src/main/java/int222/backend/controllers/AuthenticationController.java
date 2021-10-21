@@ -26,7 +26,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@CrossOrigin("*")
+
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
