@@ -52,4 +52,9 @@ public class UtilityController {
     public List<MovieStatus> getMovieStatusList() {
         return this.movieStatusRepository.findAll();
     }
+
+    @GetMapping("/test/author")
+    public String testAuthorityPass(){
+        return "if you see this it means you are authorized";
+    }
 }
