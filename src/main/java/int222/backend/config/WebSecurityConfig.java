@@ -62,7 +62,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
 //                allow access without authorization by below urls
                 .antMatchers(
-                        "/auth/**","/api/**"
+                        "/","/api/**","/auth/**"
                 ).permitAll()
 //                .antMatchers("/auth/**").permitAll()
                 .anyRequest().authenticated().and()
