@@ -13,7 +13,7 @@ jobs:
 
       - name: Create .env file
         run: |
-          echo spring.datasource.jdbc-url= ${{ secrets.DEV_DB_URL }}?autoreconnect=true >> ./src/main/resources/application.properties
+          echo spring.datasource.url= ${{ secrets.DEV_DB_URL }}?autoreconnect=true >> ./src/main/resources/application.properties
           echo spring.datasource.username= ${{ secrets.DEV_DB_USERNAME }} >> ./src/main/resources/application.properties
           echo spring.datasource.password= ${{ secrets.DEV_DB_PASSWORD }} >> ./src/main/resources/application.properties
           echo jwt.header= ${{ secrets.JWT_HEADER }} >> ./src/main/resources/application.properties
