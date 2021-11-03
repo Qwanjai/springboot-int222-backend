@@ -6,12 +6,11 @@ package int222.backend.config;
 
 import int222.backend.auth.TokenAuthenticationFilter;
 import int222.backend.auth.RestAuthenticationEntryPoint;
-import int222.backend.services.CustomUserDetailsService;
-import int222.backend.services.TokenHelper;
+import int222.backend.utilities.CustomUserDetailsService;
+import int222.backend.utilities.TokenHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -54,7 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     TokenHelper tokenHelper;
-
+//"/api/**"
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -62,7 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
                 .authorizeRequests()
                 .antMatchers(
-                        "/api/view/**", "/auth/**"
+                         "/auth/**"
                 ).permitAll()
                 .anyRequest().authenticated().and()
                 .addFilterBefore(new TokenAuthenticationFilter(tokenHelper, jwtUserDetailsService), BasicAuthenticationFilter.class);
