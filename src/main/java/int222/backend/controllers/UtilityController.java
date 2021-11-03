@@ -1,15 +1,16 @@
 package int222.backend.controllers;
 
 
-import int222.backend.models.entities.Genre;
-import int222.backend.models.entities.MovieStatus;
-import int222.backend.models.entities.Studio;
-import int222.backend.repositories.GenreRepository;
-import int222.backend.repositories.MovieStatusRepository;
-import int222.backend.repositories.StudioRepository;
+import int222.backend.models.entities.*;
+import int222.backend.models.services.UserService;
+import int222.backend.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 @CrossOrigin("*")
 @RestController
@@ -24,6 +25,16 @@ public class UtilityController {
     @Autowired
     private MovieStatusRepository movieStatusRepository;
 
+    @Autowired
+    private CommentRepository commentRepository;
+
+    @Autowired
+    private UserService userService;
+
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    Date date = new Date();
+
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/view/genre")
     public List<Genre> getGenreList() {
         return this.genreRepository.findAll();
@@ -49,7 +60,7 @@ public class UtilityController {
     }
 
     @GetMapping("/view/moviestatus")
-    public List<MovieStatus> getMovieStatusList() {
+    public List<Status> getMovieStatusList() {
         return this.movieStatusRepository.findAll();
     }
 
@@ -57,4 +68,21 @@ public class UtilityController {
     public String testAuthorityPass(){
         return "if you see this it means you are authorized";
     }
+
+    @GetMapping("/view/comment")
+    public List<Comment> getCommentList(){
+        return commentRepository.findAll();
+    }
+
+    @GetMapping("/view/date")
+    public String getDate(){
+        String currentDate = formatter.format(date);
+        return currentDate;
+    }
+    @GetMapping("/view")
+    public User getUser(Authentication auth){
+        User currentUser = userService.getUserCurrent(auth);
+        return currentUser;
+    }
+
 }
