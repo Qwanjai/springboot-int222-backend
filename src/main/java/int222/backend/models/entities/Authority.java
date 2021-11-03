@@ -1,6 +1,6 @@
 package int222.backend.models.entities;
 
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity
 @Table(name="authority")
 @Setter
-public class Authority implements GrantedAuthority {
+public class Authority  implements GrantedAuthority{
     @Id
     @Column(name="authority_id")
     private int authority_id;
@@ -29,8 +29,5 @@ public class Authority implements GrantedAuthority {
     public int getId() {
         return authority_id;
     }
-
-
-
 
 }

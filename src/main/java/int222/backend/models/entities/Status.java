@@ -10,17 +10,17 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name="moviestatus")
+@Table(name="status")
 @NoArgsConstructor
 @ToString
 @AllArgsConstructor
-public class MovieStatus {
+public class Status {
     @Id
     @Column(name="status_id")
     private @Getter int status_id;
-    @Column
+    @Column(name="statusname")
     private  @Getter String statusname;
 
-    @OneToMany(mappedBy="movie")
+    @OneToMany(mappedBy="status")
     private Set<Movie> movies;
 }
