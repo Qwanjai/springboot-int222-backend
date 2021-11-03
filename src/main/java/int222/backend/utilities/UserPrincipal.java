@@ -1,4 +1,4 @@
-package int222.backend.services;
+package int222.backend.utilities;
 
 import int222.backend.models.entities.Authority;
 import int222.backend.models.entities.User;

@@ -1,4 +1,4 @@
-package int222.backend.services;
+package int222.backend.utilities;
 
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
