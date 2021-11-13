@@ -15,4 +15,10 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     @Query("SELECT u FROM User u JOIN FETCH u.userFav WHERE u.user_id = ?1 ")
     List<Movie> findAllByUserFav(long  user_id);
+
+    @Query("SELECT CASE WHEN COUNT(u) > 0 THEN true ELSE false END FROM User u WHERE UPPER(u.username) = UPPER(?1)")
+    boolean existsByUserName(String userName);
+
+    @Query("SELECT CASE WHEN COUNT(u) > 0 THEN true ELSE false END FROM User u WHERE UPPER(CONCAT(u.firstname,u.lastname) ) = UPPER(?1)")
+    boolean existsByName(String fullname);
 }
