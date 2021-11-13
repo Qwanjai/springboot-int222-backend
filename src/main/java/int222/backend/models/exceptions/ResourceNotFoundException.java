@@ -1,8 +1,8 @@
 package int222.backend.models.exceptions;
 
-public class EntityNotFoundException extends RuntimeException {
-
-    public EntityNotFoundException(String msg) {
+public class ResourceNotFoundException extends RuntimeException {
+    private static final long serialVersionUID = 1L;
+    public ResourceNotFoundException(String msg) {
         super(msg);
     }
 }
