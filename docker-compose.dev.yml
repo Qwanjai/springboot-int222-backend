@@ -8,4 +8,4 @@ services:
     build: .
     image: ghcr.io/int222/backend:dev
     volumes:
-      - ~/backend/dev/images:/backend/src/images
+      - ~/backend/dev/images:/src/images

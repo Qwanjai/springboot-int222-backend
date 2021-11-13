@@ -91,7 +91,6 @@ public class MovieController {
         if (movieService.checkNameIsAlreadyExists(newMovie.getMoviename())) {
             throw new EntityAlreadyExistsException("Movie is already exists");
         }
-
         newMovie.setPoster(file.getOriginalFilename());
         imageService.saveImg(file);
         movieRepository.save(newMovie);
