@@ -46,11 +46,6 @@ public class User {
     private Set<Movie> userFav = new HashSet<>();
 
 
-//    public void setRole(Set<Authority> role){
-//        this.roles = role;
-////        this.roles.add(role);
-//    }
-
     public void setUserFav(Set<Movie> userFav) {
         this.userFav = userFav;
     }
@@ -71,4 +66,9 @@ public class User {
     public Set<Movie> getUserFav() {
         return userFav;
     }
+
+    public String getFullname() {
+        return firstname+lastname;
+    }
+
 }
