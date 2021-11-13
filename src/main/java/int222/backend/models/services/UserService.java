@@ -20,6 +20,10 @@ public class UserService {
         return    userRepo.findByUsername(userCurrent);
 //        return SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
-
-
+    public Boolean checkUserNameIsAlreadyExists(String userName){
+        return userRepo.existsByUserName(userName);
+    }
+    public Boolean checkFullNameIsAlreadyExists(String fullName){
+        return userRepo.existsByName(fullName);
+    }
 }

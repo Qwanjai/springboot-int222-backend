@@ -28,6 +28,14 @@ public class ImageService {
         return "Upload Successfully ";
     }
 
+    public String deleteImg(String imgName) throws IOException{
+        File myFile = new File(IMAGE_PATH +imgName);
+        if (myFile.delete()) {
+            return ("Deleted the file: " + myFile.getName());
+        } else {
+           return ("Failed to delete the file.");
+        }
+    }
 
     //    @GetMapping("/view/img/{imageName}")
 //    public ResponseEntity<byte[]> getImage(@PathVariable("imageName") String imageName) throws IOException {
