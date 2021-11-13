@@ -5,6 +5,7 @@ import int222.backend.auth.JwtAuthenticationResponse;
 import int222.backend.models.entities.Authority;
 import int222.backend.models.entities.User;
 import int222.backend.models.exceptions.EntityAlreadyExistsException;
+import int222.backend.models.services.UserService;
 import int222.backend.repositories.AuthorityRepository;
 import int222.backend.repositories.UserRepository;
 import int222.backend.utilities.CustomUserDetailsService;
@@ -18,6 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
 
 
 @RestController
@@ -41,26 +43,19 @@ public class AuthenticationController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    @Autowired
+    private UserService userService;
+
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    @PostMapping("/login")
+    @PostMapping(value = "/login",consumes = "application/json")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest)throws Exception{
         try{
-//             Authentication authentication = authenticationManager.authenticate(
-//                    new UsernamePasswordAuthenticationToken(
-//                            authenticationRequest.getUsername(),
-//                            authenticationRequest.getPassword()
-//                    )
-//            );
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword()));
-//            SecurityContextHolder.getContext().setAuthentication(authentication);
-//            User user = (User)authentication.getPrincipal();
-//            final String jwt = jwtToken.generateToken(user.getUsername());
-//            return jwt;
         }catch (BadCredentialsException e){
             throw new Exception("Incorrect useranme or password",e);
         }
@@ -72,13 +67,21 @@ public class AuthenticationController {
         return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
     }
 
-    @PostMapping("/signup")
-    public void createNewUser(@RequestBody User user)throws EntityAlreadyExistsException {
+    @PostMapping(value = "/signup",consumes = "application/json")
+    public ResponseEntity<String> createNewUser(@RequestBody User user) {
+        if (userService.checkUserNameIsAlreadyExists(user.getUsername())){
+            throw new EntityAlreadyExistsException("Username is already taken");
+        }
+        if(userService.checkFullNameIsAlreadyExists(user.getFullname())){
+            throw new EntityAlreadyExistsException("Firstname and lastname is already taken , change neither one of them");
+        }
         Authority roleUser= authorityRepository.findById(2);
         String encryptedPassword= passwordEncoder.encode(user.getPassword());
         user.setPassword(encryptedPassword);
         user.setRole(roleUser);
         userRepository.save(user);
+        return ResponseEntity.ok().body("Sign up successfully");
     }
+
 
 }

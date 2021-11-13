@@ -8,6 +8,7 @@ import int222.backend.models.services.UserService;
 import int222.backend.repositories.CommentRepository;
 import int222.backend.repositories.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,18 +32,17 @@ public class CommentController {
     Date date = new Date();
 
 
-
     @PostMapping("/add/{id}")
-    public void createComment(@PathVariable("id") int movieId,@RequestBody Comment newComment,Authentication auth){
-      Movie currentMovie = movieRepo.findById(movieId).orElse(null);
-      User currentUser = userService.getUserCurrent(auth);
+    public ResponseEntity<String> createComment(@PathVariable("id") int movieId, @RequestBody Comment newComment, Authentication auth) {
+        Movie currentMovie = movieRepo.findById(movieId).orElse(null);
+        User currentUser = userService.getUserCurrent(auth);
         String currentDate = formatter.format(date);
-        newComment.setCommentid(currentMovie.getMovie_id(),currentUser.getUser_id());
+        newComment.setCommentid(currentMovie.getMovie_id(), currentUser.getUser_id());
         newComment.setCreate_date(currentDate);
-       newComment.setMovie(currentMovie);
-       newComment.setUser(currentUser);
-       commentRepo.save(newComment);
-
+        newComment.setMovie(currentMovie);
+        newComment.setUser(currentUser);
+        commentRepo.save(newComment);
+        return ResponseEntity.ok("Post comment successfully");
     }
 
 
