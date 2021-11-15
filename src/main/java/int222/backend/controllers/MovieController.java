@@ -52,15 +52,15 @@ public class MovieController {
 
     @GetMapping("/movie/{id}")
     public ResponseEntity<Movie> getMovieById(@PathVariable("id") int movieId) {
-        Movie respone = movieRepository.findById(movieId).orElseThrow(() -> new ResourceNotFoundException("Not found Movie  with id : " + movieId));
-       return new ResponseEntity<>(respone, HttpStatus.OK);
+        Movie response = movieRepository.findById(movieId).orElseThrow(() -> new ResourceNotFoundException("Not found Movie  with id : " + movieId));
+       return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
     @GetMapping("/movie/name/{name}")
     public ResponseEntity<Movie> getMovieByName(@PathVariable("name") String movieName) {
-        Movie respone = movieRepository.findByMovienameContainsIgnoreCase(movieName).orElseThrow(() -> new ResourceNotFoundException("Not found Movie  with name : " + movieName));
-        return new ResponseEntity<>(respone, HttpStatus.OK);
+        Movie response = movieRepository.findByMovienameContainsIgnoreCase(movieName).orElseThrow(() -> new ResourceNotFoundException("Not found Movie  with name : " + movieName));
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/view/status/{status_id}")

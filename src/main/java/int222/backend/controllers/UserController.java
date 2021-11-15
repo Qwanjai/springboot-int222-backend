@@ -5,6 +5,7 @@ import int222.backend.models.entities.Authority;
 import int222.backend.models.entities.Movie;
 import int222.backend.models.entities.User;
 
+import int222.backend.models.exceptions.ResourceNotFoundException;
 import int222.backend.models.services.UserService;
 import int222.backend.repositories.AuthorityRepository;
 
@@ -14,12 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Set;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api")
 public class UserController {
@@ -33,17 +36,24 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+
     @GetMapping("/view/author")
     public List<Authority> getAuthorityList() {
         return this.authorityRepository.findAll();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/view/user")
     public List<User> getUserList() {
         return this.userRepository.findAll();
 
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/view/user/{name}")
     public User getUserByFirstname(@PathVariable("name") String userFirstname) {
         User user = this.userRepository.findByFirstnameIgnoreCase(userFirstname).orElse(null);
@@ -69,5 +79,22 @@ public class UserController {
         return currentUser.getUserFav();
     }
 
+    @GetMapping("/user")
+    public ResponseEntity<User> viewUserProfole(Authentication auth) {
+        User getUser = userService.getUserCurrent(auth);
+        return ResponseEntity.ok(getUser);
+    }
 
+
+    @PutMapping("/user/edit")
+    public  ResponseEntity<User> editProfile(@RequestBody User user,Authentication auth){
+        User updateUser = userService.getUserCurrent(auth);
+        updateUser.setUsername(user.getUsername());
+        updateUser.setFirstname(user.getFirstname());
+        updateUser.setLastname(user.getLastname());
+        String encryptedPassword= passwordEncoder.encode(user.getPassword());
+        updateUser.setPassword(encryptedPassword);
+        userRepository.save(updateUser);
+        return  ResponseEntity.ok().body(updateUser);
+    }
 }
