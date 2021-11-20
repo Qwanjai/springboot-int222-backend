@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -84,5 +85,16 @@ public class AuthenticationController {
         return ResponseEntity.ok().body("Sign up successfully");
     }
 
+    @PutMapping("/user/edit")
+    public  ResponseEntity<User> editProfile(@RequestBody User user, Authentication auth){
+        User updateUser = userService.getUserCurrent(auth);
+        updateUser.setUsername(user.getUsername());
+        updateUser.setFirstname(user.getFirstname());
+        updateUser.setLastname(user.getLastname());
+        String encryptedPassword= passwordEncoder.encode(user.getPassword());
+        updateUser.setPassword(encryptedPassword);
+        userRepository.save(updateUser);
+        return  ResponseEntity.ok().body(updateUser);
+    }
 
 }
