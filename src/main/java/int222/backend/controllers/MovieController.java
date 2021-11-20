@@ -22,8 +22,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import javax.persistence.EntityNotFoundException;
+import java.io.FileInputStream;
 import java.io.IOException;
 
+import java.rmi.RemoteException;
 import java.util.List;
 
 @CrossOrigin("*")
@@ -43,7 +45,7 @@ public class MovieController {
     @Autowired
     private MovieService movieService;
 
-
+    private static final String IMAGE_PATH = "./src/images/";
     @GetMapping("/movies")
     public List<Movie> getMovieList() {
         return movieRepository.findAll();
@@ -127,8 +129,12 @@ public class MovieController {
         updateMovie.setReleasedate(newMovie.getReleasedate());
         updateMovie.setPlot(newMovie.getPlot());
         updateMovie.setAvg_rating(newMovie.getAvg_rating());
+        if(file!=null){
+            imageService.deleteImg(oldMovie.getPoster());
+            updateMovie.setPoster(newMovie.getPoster());
+             imageService.saveImg(file);
+        }
         updateMovie.setPoster(newMovie.getPoster());
-        imageService.saveImg(file);
         updateMovie.setTrailer(newMovie.getTrailer());
         updateMovie.setStudio(newMovie.getStudio());
         updateMovie.setStatus(newMovie.getStatus());
@@ -160,6 +166,19 @@ public class MovieController {
         currentUser.getUserFav().remove(currentMovie);
         userRepo.save(currentUser);
         return ResponseEntity.ok("Remove from favorite list successfully");
+    }
+
+        @GetMapping("/view/img/{imageName}")
+    public ResponseEntity<byte[]> getImage(@PathVariable("imageName") String imageName) throws IOException {
+        try {
+            FileInputStream file = new FileInputStream(IMAGE_PATH + imageName);
+            byte[] image = file.readAllBytes();
+            file.close();
+            return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
+        } catch (Exception e) {
+            throw new RemoteException("Image not Found");
+        }
+
     }
 
 }
