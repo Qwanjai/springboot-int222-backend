@@ -12,6 +12,7 @@ import int222.backend.repositories.AuthorityRepository;
 import int222.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -37,8 +38,9 @@ public class UserController {
     private UserService userService;
 
 
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+//    @Autowired
+//    private BCryptPasswordEncoder passwordEncoder;
+
 
 
     @GetMapping("/view/author")
@@ -86,15 +88,15 @@ public class UserController {
     }
 
 
-    @PutMapping("/user/edit")
-    public  ResponseEntity<User> editProfile(@RequestBody User user,Authentication auth){
-        User updateUser = userService.getUserCurrent(auth);
-        updateUser.setUsername(user.getUsername());
-        updateUser.setFirstname(user.getFirstname());
-        updateUser.setLastname(user.getLastname());
-        String encryptedPassword= passwordEncoder.encode(user.getPassword());
-        updateUser.setPassword(encryptedPassword);
-        userRepository.save(updateUser);
-        return  ResponseEntity.ok().body(updateUser);
-    }
+//    @PutMapping("/user/edit")
+//    public  ResponseEntity<User> editProfile(@RequestBody User user,Authentication auth){
+//        User updateUser = userService.getUserCurrent(auth);
+//        updateUser.setUsername(user.getUsername());
+//        updateUser.setFirstname(user.getFirstname());
+//        updateUser.setLastname(user.getLastname());
+//        String encryptedPassword= passwordEncoder.encode(user.getPassword());
+//        updateUser.setPassword(encryptedPassword);
+//        userRepository.save(updateUser);
+//        return  ResponseEntity.ok().body(updateUser);
+//    }
 }
