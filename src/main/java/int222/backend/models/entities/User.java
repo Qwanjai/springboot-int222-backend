@@ -68,7 +68,7 @@ public class User {
     }
 
     public String getFullname() {
-        return firstname+lastname;
+        return firstname+" "+lastname;
     }
 
 }

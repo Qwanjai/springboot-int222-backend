@@ -38,6 +38,7 @@ public class Comment {
     private String create_date;
     @Column(name = "rating", nullable = false)
     private float rating;
+    
 
     public void setCommentid(int movie_id, long user_id) {
         this.commentid = new CommentId(movie_id,user_id);
@@ -51,5 +52,10 @@ public class Comment {
         this.create_date = create_date;
         this.rating = rating;
     }
+
+    public String getUsername() {
+        return user.getUsername();
+    }
+
 }
 

@@ -180,5 +180,9 @@ public class MovieController {
         }
 
     }
+    @GetMapping("/movie/count")
+    public long getNumberOfMovies(){
+       return movieRepository.count();
+    }
 
 }

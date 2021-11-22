@@ -38,9 +38,6 @@ public class UserController {
     private UserService userService;
 
 
-//    @Autowired
-//    private BCryptPasswordEncoder passwordEncoder;
-
 
 
     @GetMapping("/view/author")
@@ -88,15 +85,5 @@ public class UserController {
     }
 
 
-//    @PutMapping("/user/edit")
-//    public  ResponseEntity<User> editProfile(@RequestBody User user,Authentication auth){
-//        User updateUser = userService.getUserCurrent(auth);
-//        updateUser.setUsername(user.getUsername());
-//        updateUser.setFirstname(user.getFirstname());
-//        updateUser.setLastname(user.getLastname());
-//        String encryptedPassword= passwordEncoder.encode(user.getPassword());
-//        updateUser.setPassword(encryptedPassword);
-//        userRepository.save(updateUser);
-//        return  ResponseEntity.ok().body(updateUser);
-//    }
+
 }
