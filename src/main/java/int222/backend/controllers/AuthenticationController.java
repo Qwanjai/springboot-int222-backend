@@ -48,6 +48,9 @@ public class AuthenticationController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserRepository userRepo;
+
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
@@ -63,10 +66,10 @@ public class AuthenticationController {
         }
         final UserDetails userDetails = userDetailsService
                 .loadUserByUsername(authenticationRequest.getUsername());
-
+        User user = userRepo.findByUsername(authenticationRequest.getUsername());
         final String jwt = jwtToken.generateToken(userDetails);
 
-        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+        return ResponseEntity.ok(new JwtAuthenticationResponse(user,jwt));
     }
 
     @PostMapping(value = "/signup",consumes = "application/json")
