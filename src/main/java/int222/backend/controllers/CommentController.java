@@ -4,16 +4,19 @@ package int222.backend.controllers;
 import int222.backend.models.entities.Comment;
 import int222.backend.models.entities.Movie;
 import int222.backend.models.entities.User;
+import int222.backend.models.exceptions.ResourceNotFoundException;
 import int222.backend.models.services.UserService;
 import int222.backend.repositories.CommentRepository;
 import int222.backend.repositories.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @CrossOrigin("*")
 @RestController
@@ -43,6 +46,11 @@ public class CommentController {
         newComment.setUser(currentUser);
         commentRepo.save(newComment);
         return ResponseEntity.ok("Post comment successfully");
+    }
+
+    @GetMapping("/get/{id}")
+    public List<Comment> getCommentByMovieId(@PathVariable("id") int movieId) {
+        return commentRepo.findByMovieId(movieId);
     }
 
 

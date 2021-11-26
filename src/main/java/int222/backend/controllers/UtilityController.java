@@ -14,7 +14,6 @@ import java.util.Date;
 import java.util.List;
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/api")
 public class UtilityController {
     @Autowired
     private GenreRepository genreRepository;
@@ -26,7 +25,7 @@ public class UtilityController {
     private MovieStatusRepository movieStatusRepository;
 
     @Autowired
-    private CommentRepository commentRepository;
+    private CommentRepository commentRepo;
 
     @Autowired
     private UserService userService;
@@ -71,7 +70,7 @@ public class UtilityController {
 
     @GetMapping("/view/comment")
     public List<Comment> getCommentList(){
-        return commentRepository.findAll();
+        return commentRepo.findAll();
     }
 
     @GetMapping("/view/date")
@@ -83,6 +82,10 @@ public class UtilityController {
     public User getUser(Authentication auth){
         User currentUser = userService.getUserCurrent(auth);
         return currentUser;
+    }
+    @GetMapping("/view/comment/{id}")
+    public List<Comment> getCommentByMovieId(@PathVariable("id") int movieId) {
+        return commentRepo.findByMovieId(movieId);
     }
 
 }
