@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 @CrossOrigin("*")
 @RestController
+@RequestMapping("/view")
 public class UtilityController {
     @Autowired
     private GenreRepository genreRepository;
@@ -30,11 +31,13 @@ public class UtilityController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserRepository userRepo;
+
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     Date date = new Date();
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/view/genre")
+    @GetMapping("/genre")
     public List<Genre> getGenreList() {
         return this.genreRepository.findAll();
     }
@@ -53,39 +56,44 @@ public class UtilityController {
         return "Delete Genre Sucessful";
     }
 
-    @GetMapping("/view/studio")
+    @GetMapping("/studio")
     public List<Studio> getStudioList() {
         return this.studioRepository.findAll();
     }
 
-    @GetMapping("/view/moviestatus")
+    @GetMapping("/moviestatus")
     public List<Status> getMovieStatusList() {
         return this.movieStatusRepository.findAll();
     }
 
-    @GetMapping("/test/author")
+    @GetMapping("/author")
     public String testAuthorityPass(){
         return "if you see this it means you are authorized";
     }
 
-    @GetMapping("/view/comment")
+    @GetMapping("/comment")
     public List<Comment> getCommentList(){
         return commentRepo.findAll();
     }
 
-    @GetMapping("/view/date")
+    @GetMapping("/date")
     public String getDate(){
         String currentDate = formatter.format(date);
         return currentDate;
     }
-    @GetMapping("/view")
+    @GetMapping("/currentuser")
     public User getUser(Authentication auth){
         User currentUser = userService.getUserCurrent(auth);
         return currentUser;
     }
-    @GetMapping("/view/comment/{id}")
+    @GetMapping("/comment/{id}")
     public List<Comment> getCommentByMovieId(@PathVariable("id") int movieId) {
         return commentRepo.findByMovieId(movieId);
     }
 
+
+    @GetMapping("/userlist")
+    public String[] getUserList(){
+        return userRepo.getUsername();
+    }
 }
