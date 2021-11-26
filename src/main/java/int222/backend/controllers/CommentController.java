@@ -48,10 +48,7 @@ public class CommentController {
         return ResponseEntity.ok("Post comment successfully");
     }
 
-    @GetMapping("/get/{id}")
-    public List<Comment> getCommentByMovieId(@PathVariable("id") int movieId) {
-        return commentRepo.findByMovieId(movieId);
-    }
+
 
 
 }
