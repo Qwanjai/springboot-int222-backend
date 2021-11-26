@@ -1,0 +1,11 @@
+networks:
+  default:
+    external:
+      name: int222-network
+services:
+  backend:
+    container_name: backend_prd
+    build: .
+    image: ghcr.io/int222/backend:prd
+    volumes:
+      - ~/backend/prd/images:/src/images
