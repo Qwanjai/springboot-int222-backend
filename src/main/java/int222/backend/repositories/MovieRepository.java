@@ -2,7 +2,6 @@ package int222.backend.repositories;
 
 
 import int222.backend.models.entities.Movie;
-import int222.backend.models.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -30,6 +29,11 @@ public interface MovieRepository extends JpaRepository<Movie, Integer> {
 
     @Query("SELECT CASE WHEN COUNT(m) > 0 THEN true ELSE false END FROM Movie m WHERE UPPER(m.moviename) = UPPER(?1)")
     boolean existsByName(String movieName);
+
+
+    List<Movie> findTop5By();
+
+
 
 
 }

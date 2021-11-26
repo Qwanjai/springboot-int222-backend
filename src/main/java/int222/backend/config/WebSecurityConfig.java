@@ -78,7 +78,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         web
                 .ignoring()
                 // All of Spring Security will ignore the requests
-                .antMatchers("/api/test/**","/movies","/movie/{id}","/movie/name/{name}","/view/**");
+                .antMatchers("/api/test/**","/movies/**","/view/**");
 
     }
 

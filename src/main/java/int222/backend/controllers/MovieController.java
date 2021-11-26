@@ -50,7 +50,11 @@ public class MovieController {
     public List<Movie> getMovieList() {
         return movieRepository.findAll();
     }
-
+//    findTop5By
+@GetMapping("/movies/top5")
+public List<Movie> getTop5MovieList() {
+    return movieRepository.findTop5By();
+}
 
     @GetMapping("/movie/{id}")
     public ResponseEntity<Movie> getMovieById(@PathVariable("id") int movieId) {
