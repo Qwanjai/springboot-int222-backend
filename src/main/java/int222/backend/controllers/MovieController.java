@@ -124,9 +124,6 @@ public List<Movie> getTop5MovieList() {
     public ResponseEntity<Movie> updateMovie(@PathVariable("id") int movie_id, @RequestParam String movie, @RequestPart(required = false) MultipartFile file) throws IOException, MultipartException {
         Movie newMovie = movieService.convertJsonStringToMovie(movie);
         Movie oldMovie = movieRepository.findById(movie_id).orElseThrow(() -> new ResourceNotFoundException("Not found Movie  with name : " + newMovie.getMoviename()));
-        if (oldMovie.getMoviename().equalsIgnoreCase(newMovie.getMoviename())) {
-            throw new EntityAlreadyExistsException("This movie is already exist");
-        }
         Movie updateMovie = this.movieRepository.getById(movie_id);
         updateMovie.setMoviename(newMovie.getMoviename());
         updateMovie.setRuntime(newMovie.getRuntime());
