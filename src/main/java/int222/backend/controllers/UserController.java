@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +38,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+//    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
 
 
@@ -73,7 +75,8 @@ public class UserController {
     }
 
     @GetMapping("/user/favlist")
-    public Set<Movie> getUserfav(Authentication auth) {
+    public Set<Movie> getUserfav() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = userService.getUserCurrent(auth);
         return currentUser.getUserFav();
     }
