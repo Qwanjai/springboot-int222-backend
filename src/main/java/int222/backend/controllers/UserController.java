@@ -48,14 +48,14 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/view/user")
+    @GetMapping("/admin/view/user")
     public List<User> getUserList() {
         return this.userRepository.findAll();
 
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/view/user/{name}")
+    @GetMapping("/admin/view/user/{name}")
     public User getUserByFirstname(@PathVariable("name") String userFirstname) {
         User user = this.userRepository.findByFirstnameIgnoreCase(userFirstname).orElse(null);
         if (user == null) {

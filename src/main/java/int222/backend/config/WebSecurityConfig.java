@@ -61,7 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
                 .authorizeRequests()
-//                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/**/admin/**").hasRole("ADMIN")
 //                .antMatchers("/movie/{id}/fav","/movie/fav/{id}","/api/comment/**").hasRole("USER")
                 .antMatchers(
                          "/auth/**"
