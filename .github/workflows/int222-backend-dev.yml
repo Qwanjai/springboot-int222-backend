@@ -13,9 +13,14 @@ jobs:
 
       - name: Create .env file
         run: |
-          echo spring.datasource.url=${{ secrets.DEV_DB_URL }} >> ./src/main/resources/application.properties
-          echo spring.datasource.username=${{ secrets.DEV_DB_USERNAME }} >> ./src/main/resources/application.properties
-          echo spring.datasource.password=${{ secrets.DEV_DB_PASSWORD }} >> ./src/main/resources/application.properties
+          echo spring.datasource.url= ${{ secrets.DEV_DB_URL }} >> ./src/main/resources/application.properties
+          echo spring.datasource.username= ${{ secrets.DEV_DB_USERNAME }} >> ./src/main/resources/application.properties
+          echo spring.datasource.password= ${{ secrets.DEV_DB_PASSWORD }} >> ./src/main/resources/application.properties
+          echo jwt.header= ${{ secrets.JWT_HEADER }} >> ./src/main/resources/application.properties
+          echo jwt.token.validity= ${{ secrets.JWT_TOKEN_VALIDITY }} >> ./src/main/resources/application.properties
+          echo jwt.signing.key= ${{ secrets.JWT_SIGNING_KEY }} >> ./src/main/resources/application.properties
+          echo jwt.authorities.key= ${{ secrets.JWT_AUTHORITIES_KEY }} >> ./src/main/resources/application.properties
+          echo jwt.token.prefix= ${{ secrets.JWT_TOKEN_PREFIX }} >> ./src/main/resources/application.properties
           cat ./src/main/resources/application.properties
 
 

@@ -5,30 +5,27 @@ import int222.backend.auth.JwtAuthenticationResponse;
 import int222.backend.models.entities.Authority;
 import int222.backend.models.entities.User;
 import int222.backend.models.exceptions.EntityAlreadyExistsException;
+import int222.backend.models.services.UserService;
 import int222.backend.repositories.AuthorityRepository;
 import int222.backend.repositories.UserRepository;
-import int222.backend.services.CustomUserDetailsService;
-import int222.backend.services.TokenHelper;
+import int222.backend.utilities.CustomUserDetailsService;
+import int222.backend.utilities.TokenHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
-@CrossOrigin("*")
+
 @RestController
 @RequestMapping("/auth")
+@CrossOrigin("*")
 public class AuthenticationController {
     @Autowired
     private UserRepository userRepository;
@@ -48,44 +45,59 @@ public class AuthenticationController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private UserRepository userRepo;
+
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    @PostMapping("/login")
+    @PostMapping(value = "/login",consumes = "application/json")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest)throws Exception{
         try{
-//             Authentication authentication = authenticationManager.authenticate(
-//                    new UsernamePasswordAuthenticationToken(
-//                            authenticationRequest.getUsername(),
-//                            authenticationRequest.getPassword()
-//                    )
-//            );
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword()));
-//            SecurityContextHolder.getContext().setAuthentication(authentication);
-//            User user = (User)authentication.getPrincipal();
-//            final String jwt = jwtToken.generateToken(user.getUsername());
-//            return jwt;
         }catch (BadCredentialsException e){
-            throw new Exception("Incorrect useranme or password",e);
+            throw new Exception("Incorrect username or password",e);
         }
         final UserDetails userDetails = userDetailsService
                 .loadUserByUsername(authenticationRequest.getUsername());
-
+        User user = userRepo.findByUsername(authenticationRequest.getUsername());
         final String jwt = jwtToken.generateToken(userDetails);
 
-        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+        return ResponseEntity.ok(new JwtAuthenticationResponse(user,jwt));
     }
 
-    @PostMapping("/signup")
-    public void createNewUser(@RequestBody User user)throws EntityAlreadyExistsException {
+    @PostMapping(value = "/signup",consumes = "application/json")
+    public ResponseEntity<String> createNewUser(@RequestBody User user) {
+        if (userService.checkUserNameIsAlreadyExists(user.getUsername())){
+            throw new EntityAlreadyExistsException("Username is already taken");
+        }
+        if(userService.checkFullNameIsAlreadyExists(user.getFullname())){
+            throw new EntityAlreadyExistsException("Firstname and lastname is already taken , change neither one of them");
+        }
         Authority roleUser= authorityRepository.findById(2);
         String encryptedPassword= passwordEncoder.encode(user.getPassword());
         user.setPassword(encryptedPassword);
         user.setRole(roleUser);
         userRepository.save(user);
+        return ResponseEntity.ok().body("Sign up successfully");
+    }
+
+    @PutMapping("/user/edit")
+    public  ResponseEntity<User> editProfile(@RequestBody User user, Authentication auth){
+        User updateUser = userService.getUserCurrent(auth);
+        updateUser.setUsername(user.getUsername());
+        updateUser.setFirstname(user.getFirstname());
+        updateUser.setLastname(user.getLastname());
+        String encryptedPassword= passwordEncoder.encode(user.getPassword());
+        updateUser.setPassword(encryptedPassword);
+        userRepository.save(updateUser);
+        return  ResponseEntity.ok().body(updateUser);
     }
 
 }
