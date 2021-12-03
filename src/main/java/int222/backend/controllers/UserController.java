@@ -26,6 +26,7 @@ import java.util.Set;
 
 @CrossOrigin("*")
 @RestController
+@RequestMapping("/api")
 public class UserController {
     @Autowired
     private UserRepository userRepository;
@@ -54,7 +55,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/view/user/{name}")
+    @GetMapping("/admin/view/user/{name}")
     public User getUserByFirstname(@PathVariable("name") String userFirstname) {
         User user = this.userRepository.findByFirstnameIgnoreCase(userFirstname).orElse(null);
         if (user == null) {
@@ -64,7 +65,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/admin/user/{id}")
+    @DeleteMapping("/user/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable("id") long id) {
         if (userRepository.findById(id).isEmpty()) {
             throw new EntityNotFoundException("Not found user with this id " + id);
