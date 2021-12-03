@@ -80,7 +80,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // TokenAuthenticationFilter will ignore the below paths
         web
                 .ignoring()
-                .antMatchers("/api/test/**","/movies","/movie/{id}","/movie/name/{name}","/movie/{id}","/view/**");
+                .antMatchers("/api/test/**","/movies","/movie/{id}","/movie/name/{name}","/movie/{id}","/view/**","/movies/top5");
 
 
     }
