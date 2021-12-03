@@ -22,6 +22,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 @Configuration
 @EnableWebSecurity
@@ -67,9 +68,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 ).permitAll()
                 .anyRequest().authenticated().and()
                 .addFilterBefore(new TokenAuthenticationFilter(tokenHelper, jwtUserDetailsService), BasicAuthenticationFilter.class);
-
+        http.cors();
         http.csrf().disable();
     }
+
+
 
 
     @Override
@@ -77,8 +80,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // TokenAuthenticationFilter will ignore the below paths
         web
                 .ignoring()
-                // All of Spring Security will ignore the requests
-                .antMatchers("/api/test/**","/movie/{id}","/movie/name/{name}","/movie/{id}","/view/**");
+                .antMatchers("/api/test/**","/movies","/movie/{id}","/movie/name/{name}","/movie/{id}","/view/**");
 
 
     }
