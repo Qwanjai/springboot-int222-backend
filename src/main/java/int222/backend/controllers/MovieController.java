@@ -89,9 +89,9 @@ public List<Movie> getTop5MovieList() {
         return movieRepository.findByMovieGenreNameContainsIgnoreCase(genreName);
     }
 
-
+//, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping(value = "/admin/movie/add", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/admin/movie/add")
     public ResponseEntity<String> newMovie(@RequestParam String movie, @RequestPart MultipartFile file) throws IOException,MultipartException {
         Movie newMovie = movieService.convertJsonStringToMovie(movie);
         if (movieService.checkNameIsAlreadyExists(newMovie.getMoviename())) {
