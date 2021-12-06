@@ -92,7 +92,7 @@ public List<Movie> getTop5MovieList() {
 //, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "/admin/movie/add")
-    public ResponseEntity<String> newMovie(@RequestParam String movie, @RequestParam MultipartFile imgFile) throws IOException,MultipartException {
+    public ResponseEntity<String> newMovie(@RequestParam("movie") String movie, @RequestParam("imgFile") MultipartFile imgFile) throws IOException,MultipartException {
         Movie newMovie = movieService.convertJsonStringToMovie(movie);
         if (movieService.checkNameIsAlreadyExists(newMovie.getMoviename())) {
             throw new EntityAlreadyExistsException("Movie is already exists");
