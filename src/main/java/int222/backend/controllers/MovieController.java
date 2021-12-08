@@ -1,5 +1,6 @@
 package int222.backend.controllers;
 
+import int222.backend.models.entities.Comment;
 import int222.backend.models.entities.Movie;
 import int222.backend.models.entities.User;
 import int222.backend.models.exceptions.EntityAlreadyExistsException;
@@ -7,6 +8,7 @@ import int222.backend.models.exceptions.ResourceNotFoundException;
 import int222.backend.models.services.ImageService;
 import int222.backend.models.services.MovieService;
 import int222.backend.models.services.UserService;
+import int222.backend.repositories.CommentRepository;
 import int222.backend.repositories.MovieRepository;
 import int222.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +46,9 @@ public class MovieController {
     private ImageService imageService;
     @Autowired
     private MovieService movieService;
+
+//    @Autowired
+//    private CommentRepository commentRepo;
 
     private static final String IMAGE_PATH = "./src/images/";
     @GetMapping("/movies")
@@ -89,16 +94,15 @@ public List<Movie> getTop5MovieList() {
         return movieRepository.findByMovieGenreNameContainsIgnoreCase(genreName);
     }
 
-
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping(value = "/admin/movie/add", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<String> newMovie(@RequestParam String movie, @RequestPart MultipartFile file) throws IOException,MultipartException {
+    @PostMapping(value = "/admin/movie/add")
+    public ResponseEntity<String> newMovie(@RequestParam("movie") String movie, @RequestParam("imgFile") MultipartFile imgFile ,Authentication auth) throws IOException,MultipartException {
         Movie newMovie = movieService.convertJsonStringToMovie(movie);
         if (movieService.checkNameIsAlreadyExists(newMovie.getMoviename())) {
             throw new EntityAlreadyExistsException("Movie is already exists");
         }
-        newMovie.setPoster(file.getOriginalFilename());
-        imageService.saveImg(file);
+        newMovie.setPoster(imgFile.getOriginalFilename());
+        imageService.saveImg(imgFile);
         movieRepository.save(newMovie);
         return  ResponseEntity.ok("Add movie successfully");
     }
@@ -107,10 +111,12 @@ public List<Movie> getTop5MovieList() {
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/admin/movie/delete/{id}")
-    public ResponseEntity<String> deleteMovie(@PathVariable("id") int movieId) throws IOException{
+    public ResponseEntity<String> deleteMovie(@PathVariable("id") int movieId, Authentication auth) throws IOException{
         Movie delMovie = movieRepository.findById(movieId).orElseThrow(() -> new ResourceNotFoundException("Not found Movie  with id: " + movieId));
+        userService.removeUserFav(movieId);
         String delMovieImg = delMovie.getPoster();
         imageService.deleteImg(delMovieImg);
+        this.unFavMovie(movieId,auth);
         if (movieRepository.existsById(movieId)) {
             movieRepository.deleteById(movieId);
             return ResponseEntity.ok("Movie successfully deleted");
@@ -121,7 +127,7 @@ public List<Movie> getTop5MovieList() {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(value ="/admin/movie/edit/{id}",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Movie> updateMovie(@PathVariable("id") int movie_id, @RequestParam String movie, @RequestPart(required = false) MultipartFile file) throws IOException, MultipartException {
+    public ResponseEntity<Movie> updateMovie(@PathVariable("id") int movie_id, @RequestParam String movie, @RequestPart(required = false) MultipartFile file, Authentication auth) throws IOException, MultipartException {
         Movie newMovie = movieService.convertJsonStringToMovie(movie);
         Movie oldMovie = movieRepository.findById(movie_id).orElseThrow(() -> new ResourceNotFoundException("Not found Movie  with name : " + newMovie.getMoviename()));
         Movie updateMovie = this.movieRepository.getById(movie_id);

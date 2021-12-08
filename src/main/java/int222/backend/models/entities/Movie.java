@@ -56,4 +56,8 @@ public class Movie {
         this.movieGenre = movieGenre;
     }
 
+    public void removeComment(int movie_id){
+        this.comments.remove(movie_id);
+    }
+
 }
