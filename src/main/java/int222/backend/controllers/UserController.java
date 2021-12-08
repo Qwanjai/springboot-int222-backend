@@ -2,6 +2,7 @@ package int222.backend.controllers;
 
 
 import int222.backend.models.entities.Authority;
+import int222.backend.models.entities.Comment;
 import int222.backend.models.entities.Movie;
 import int222.backend.models.entities.User;
 
@@ -9,6 +10,7 @@ import int222.backend.models.exceptions.ResourceNotFoundException;
 import int222.backend.models.services.UserService;
 import int222.backend.repositories.AuthorityRepository;
 
+import int222.backend.repositories.CommentRepository;
 import int222.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -38,8 +40,8 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-//    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
+    @Autowired
+    private CommentRepository commentRepository;
 
 
     @GetMapping("/view/author")
@@ -70,6 +72,8 @@ public class UserController {
         if (userRepository.findById(id).isEmpty()) {
             throw new EntityNotFoundException("Not found user with this id " + id);
         }
+        List<Comment> commentList = commentRepository.findByUserId(id);
+        commentRepository.deleteAll(commentList);
         userRepository.deleteById(id);
         return ResponseEntity.ok("Delete Sucsessful");
     }
@@ -86,7 +90,6 @@ public class UserController {
         User getUser = userService.getUserCurrent(auth);
         return ResponseEntity.ok(getUser);
     }
-
 
 
 }
